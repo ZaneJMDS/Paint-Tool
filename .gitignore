@@ -1,3 +1,6 @@
+# Additional
+*.user
+
 # VS Folders
 *.vs
 *x64
