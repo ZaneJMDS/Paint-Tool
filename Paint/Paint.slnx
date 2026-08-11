@@ -3,5 +3,7 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="Paint.vcxproj" />
+  <Project Path="Paint.vcxproj" Id="57284ef0-6219-4bd5-bc6d-fd9c7693ef74">
+    <Platform Project="Win32" />
+  </Project>
 </Solution>

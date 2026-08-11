@@ -2,8 +2,9 @@
 *.user
 
 # VS Folders
-*.vs
-*x64
+.vs/
+x64/
+x86/
 
 # Prerequisites
 *.d
