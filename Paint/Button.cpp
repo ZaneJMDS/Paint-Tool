@@ -1,5 +1,6 @@
 #include "Button.h"
 
+// Default button setup
 Button::Button(ButtonRole m_ButtonRole, sf::Vector2f _position, sf::Color _color)
 {
 	m_ButtonShape.setPosition(_position);

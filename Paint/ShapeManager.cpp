@@ -2,9 +2,9 @@
 
 ShapeManager::ShapeManager()
 {
-	m_current_tool = tool_rectangle;
+	m_current_tool = tool_circle; // Starting tool
 	sf::Vertex a;
-	a.color = sf::Color::Green;
+	a.color = sf::Color::Green; 
 	a.position = sf::Vector2f(0, 0);
 	m_line_tool_ref.append(a);
 	m_line_tool_ref.setPrimitiveType(sf::PrimitiveType::TriangleFan);
@@ -14,6 +14,7 @@ ShapeManager::~ShapeManager()
 {
 }
 
+// Set shapes for circle and rectangle tools
 void ShapeManager::SetTools(sf::CircleShape* _circle_ref, sf::RectangleShape* _rect_ref)
 {
 	m_circle_ref = _circle_ref;
@@ -31,6 +32,10 @@ void ShapeManager::Update(sf::RenderWindow* _window)
 		break;
 
 	case tool_circle:
+		m_circle_ref->setPosition(mouse_pos);
+		break;
+
+	case tool_line:
 		break;
 
 	case tool_colour:

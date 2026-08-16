@@ -5,6 +5,7 @@ enum CurrentTool
 {
 	tool_rectangle,
 	tool_circle,
+	tool_line,
 	tool_colour
 };
 

@@ -76,6 +76,7 @@ void FileInterface::LoadFile(sf::RenderTexture* _texture)
 }
 
 // Code from Zac
+// Save file to users file explorer
 void FileInterface::SaveFile(sf::RenderTexture* _texture)
 {
 	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
