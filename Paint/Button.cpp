@@ -6,6 +6,8 @@ Button::Button(ButtonRole m_ButtonRole, sf::Vector2f _position, sf::Color _color
 	m_ButtonShape.setPosition(_position);
 	m_ButtonShape.setSize({ 100, 50 });
 	m_ButtonShape.setFillColor({ _color });
+	m_ButtonShape.setOutlineThickness(-5.f);
+	m_ButtonShape.setOutlineColor({ sf::Color::Black });
 }
 
 Button::~Button()

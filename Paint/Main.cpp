@@ -29,32 +29,35 @@ int main()
     // Set up circle and rectangle tools
     g_ShapeManager.SetTools(&Circle, &Rectangle);
 
+    // Button Setup
+    const int button_count = 7;
+    std::vector<Button> buttons;
+
     // Text and font set up
     sf::Font Font1("Arial.ttf");
     sf::Text SaveText(Font1, "Save", 24);
     sf::Text LoadText(Font1, "Load", 24);
+    sf::Text ResetCanvas(Font1, "Reset Canvas", 24);
     sf::Text CircleText(Font1, "Draw", 24);
     sf::Text SquareText(Font1, "Boxes", 24);
     sf::Text EllipseText(Font1, "Ellipses", 24);
     sf::Text LineText(Font1, "Lines", 24);
-    sf::Text text_array[6] = { SaveText, LoadText, CircleText, SquareText, EllipseText, LineText };
+    sf::Text text_array[button_count] = { SaveText, LoadText, ResetCanvas, CircleText, SquareText, EllipseText, LineText };
 
-    // Button Setup
-    int button_count = 6;
-    std::vector<Button> buttons;
-
-    // Create 2 menu buttons
+    // Create menu buttons
     for (int i = 0; i < button_count; i++)
     {
         // Makes button with role, location, and colour 
-        Button NewButton((ButtonRole)i, { 120.f * i, 800.f }, sf::Color::Red);
-        text_array[i].setPosition({ 120.f * i, 800.f });
+        Button NewButton((ButtonRole)i, { 100.f * i, 800.f }, sf::Color::Green);
+        text_array[i].setPosition({ 100.f * i, 800.f });
         buttons.push_back(NewButton);
     }
 
     // Only grab input while the window is open 
     while (window.isOpen())
     {
+        sf::Text ThicknessText(Font1, "Thickness: " + std::to_string(g_CanvasManager.GetThickness()), 24);
+
         // If an event happened
         while (const std::optional event = window.pollEvent())
         {
@@ -87,15 +90,15 @@ int main()
             if (auto* mouse = event->getIf<sf::Event::MouseWheelScrolled>())
             {
                 // Check the size isn't too small
-                if (Circle.getRadius() > 5)
+                if (g_CanvasManager.GetThickness() > 5.f)
                 {
-                    if ((mouse->delta) < 0) { Circle.setRadius(Circle.getRadius() - 5.f); } // Scroll down decreases size
+                    if ((mouse->delta) < 0) { g_CanvasManager.SetThickness(g_CanvasManager.GetThickness() - 5.f); } // Scroll down decreases size
                 }
 
                 // Check the size isn't too large
-                if (Circle.getRadius() < 100)
+                if (g_CanvasManager.GetThickness() < 100.f)
                 {
-                    if ((mouse->delta) > 0) { Circle.setRadius(Circle.getRadius() + 5.f); } // Scroll up increases size
+                    if ((mouse->delta) > 0) { g_CanvasManager.SetThickness(g_CanvasManager.GetThickness() + 5.f); } // Scroll up increases size
                 }
             }
 
@@ -121,27 +124,32 @@ int main()
                         {
                             g_FileInterface.LoadFile(&texture);
                         }
+
+                        if (i == 2)
+                        {
+                            g_CanvasManager.ResetCanvas();
+                        }
                         
                         // Draw
-                        if (i == 2)
+                        if (i == 3)
                         {
                             g_ShapeManager.SwapTool(tool_circle);
                         }
 
                         // Boxes
-                        if (i == 3)
+                        if (i == 4)
                         {
                             g_ShapeManager.SwapTool(tool_rectangle);
                         }
 
                         // Elipses
-                        if (i == 4)
+                        if (i == 5)
                         {
                             g_ShapeManager.SwapTool(tool_circle);
                         }
 
                         // Lines
-                        if (i == 5)
+                        if (i == 6)
                         {
                             g_ShapeManager.SwapTool(tool_rectangle);
                         }
@@ -199,6 +207,9 @@ int main()
             window.draw(text_array[i]);
         }
         
+        ThicknessText.setPosition({ 100.f * button_count, 800.f });
+        window.draw(ThicknessText);
+
         window.display();
 
         // Tool window updates

@@ -36,8 +36,8 @@ void Canvas::DrawShape(ShapeManager* _manager, sf::RenderWindow* _window, sf::Co
 		{
 			// Default rectangle parameters
 			sf::RectangleShape Rectangle;
-			Rectangle.setSize({ 20.f, 20.f });
-			Rectangle.setFillColor(sf::Color::Red);
+			Rectangle.setSize({ thickness, thickness });
+			Rectangle.setFillColor(_color);
 			Rectangle.setPosition(sf::Vector2f(mouse_pos));
 
 			// Draw to screen
@@ -52,8 +52,8 @@ void Canvas::DrawShape(ShapeManager* _manager, sf::RenderWindow* _window, sf::Co
 		{
 			// Default circle parameters
 			sf::CircleShape Circle;
-			Circle.setRadius(5.f);
-			Circle.setFillColor(sf::Color::Red);
+			Circle.setRadius(thickness);
+			Circle.setFillColor(_color);
 			Circle.setPosition(sf::Vector2f(mouse_pos));
 
 			// Draw to screen
@@ -85,4 +85,9 @@ void Canvas::DrawShape(ShapeManager* _manager, sf::RenderWindow* _window, sf::Co
 		default:
 			break;
 	}
+}
+
+void Canvas::ResetCanvas()
+{
+	m_canvas_shape.setFillColor(sf::Color::White);
 }
