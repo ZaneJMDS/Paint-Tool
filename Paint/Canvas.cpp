@@ -40,8 +40,8 @@ void Canvas::DrawShape(ShapeManager* _manager, sf::RenderWindow* _window, sf::Ve
 			Rectangle.setFillColor(_color);
 			Rectangle.setPosition(sf::Vector2f(_last_mouse_pos));
 			
+			// Thickness
 			Rectangle.setOutlineThickness(-thickness);
-			
 			if (_color == sf::Color::White) { Rectangle.setOutlineColor(sf::Color::Black); }
 
 			// Draw to screen

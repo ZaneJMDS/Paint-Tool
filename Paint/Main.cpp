@@ -19,8 +19,11 @@ int main()
     FileInterface g_FileInterface;
 
     // Circle setup
-    sf::CircleShape Circle(50.f);
+    sf::CircleShape Circle(g_CanvasManager.GetThickness());
     sf::CircleShape Circle2(50.f);
+    Circle.setFillColor(sf::Color(0, 0, 0, 0));
+    Circle.setOutlineThickness(1.f);
+    Circle.setOutlineColor(sf::Color::Black);
 
     // Rectangle setup
     sf::RectangleShape Rectangle({ 50.f, 50.f });
@@ -58,7 +61,7 @@ int main()
 
     // Color setup
     const int color_count = 8;
-    sf::Color color_array[color_count] = {sf::Color::Black, sf::Color::White, sf::Color::Red, sf::Color::Yellow, sf::Color::Green, sf::Color::Cyan, sf::Color::Blue, sf::Color::Magenta};
+    sf::Color color_array[color_count] = {sf::Color::Black, sf::Color::Red, sf::Color(255, 165, 0), sf::Color::Yellow, sf::Color::Green, sf::Color::Cyan, sf::Color::Blue, sf::Color::Magenta};
     sf::Color current_color = color_array[0];
 
     // Create colour buttons
@@ -80,6 +83,10 @@ int main()
     while (window.isOpen())
     {
         sf::Text ThicknessText(Font1, "Thickness: " + std::to_string(g_CanvasManager.GetThickness()), 24);
+        sf::Vector2i mouse_pos = sf::Mouse::getPosition(window); // Draw to this location
+        mouse_pos.x -= 100;
+        mouse_pos.y -= 100;
+        Circle.setPosition(sf::Vector2f(mouse_pos));
 
         // If an event happened in Main window
         while (const std::optional event = window.pollEvent())
@@ -99,15 +106,25 @@ int main()
             if (auto* mouse = event->getIf<sf::Event::MouseWheelScrolled>())
             {
                 // Check the size isn't too small
-                if (g_CanvasManager.GetThickness() > 5.f)
+                if (g_CanvasManager.GetThickness() > 0.f)
                 {
-                    if ((mouse->delta) < 0) { g_CanvasManager.SetThickness(g_CanvasManager.GetThickness() - 5.f); } // Scroll down decreases size
+                    // Scroll down decreases size
+                    if ((mouse->delta) < 0) 
+                    { 
+                        g_CanvasManager.SetThickness(g_CanvasManager.GetThickness() - 5.f);
+                        Circle.setRadius(Circle.getRadius() - 5.f);
+                    } 
                 }
 
                 // Check the size isn't too large
                 if (g_CanvasManager.GetThickness() < 100.f)
                 {
-                    if ((mouse->delta) > 0) { g_CanvasManager.SetThickness(g_CanvasManager.GetThickness() + 5.f); } // Scroll up increases size
+                    // Scroll up increases size
+                    if ((mouse->delta) > 0) 
+                    { 
+                        g_CanvasManager.SetThickness(g_CanvasManager.GetThickness() + 5.f); 
+                        Circle.setRadius(Circle.getRadius() + 5.f);
+                    } 
                 }
             }
 
@@ -276,8 +293,9 @@ int main()
         }
 
         // Draw thickness
-        ThicknessText.setPosition({ 100.f * button_count, 800.f });
+        ThicknessText.setPosition({ 110.f * button_count, 810.f });
         window.draw(ThicknessText);
+        window.draw(Circle);
 
         window.display();
 
