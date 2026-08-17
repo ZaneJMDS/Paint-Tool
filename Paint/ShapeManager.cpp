@@ -15,10 +15,11 @@ ShapeManager::~ShapeManager()
 }
 
 // Set shapes for circle and rectangle tools
-void ShapeManager::SetTools(sf::CircleShape* _circle_ref, sf::RectangleShape* _rect_ref)
+void ShapeManager::SetTools(sf::CircleShape* _circle_ref, sf::RectangleShape* _rect_ref, sf::CircleShape* _elipse_ref)
 {
 	m_circle_ref = _circle_ref;
 	m_rect_ref = _rect_ref;
+	m_elipse_ref = _elipse_ref;
 }
 
 void ShapeManager::Update(sf::RenderWindow* _window)
@@ -33,6 +34,10 @@ void ShapeManager::Update(sf::RenderWindow* _window)
 
 	case tool_circle:
 		m_circle_ref->setPosition(mouse_pos);
+		break;
+
+	case tool_elipse:
+		m_elipse_ref->setPosition(mouse_pos);
 		break;
 
 	case tool_line:

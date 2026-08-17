@@ -19,13 +19,14 @@ int main()
     FileInterface g_FileInterface;
 
     // Circle setup
-    sf::CircleShape Circle(50.f); // Starting Circle
+    sf::CircleShape Circle(50.f);
+    sf::CircleShape Circle2(50.f);
 
     // Rectangle setup
     sf::RectangleShape Rectangle({ 50.f, 50.f });
 
     // Set up circle and rectangle tools
-    g_ShapeManager.SetTools(&Circle, &Rectangle);
+    g_ShapeManager.SetTools(&Circle, &Rectangle, &Circle2);
 
     // Button Setup
     std::vector<Button> buttons;
@@ -71,7 +72,9 @@ int main()
         color_buttons.push_back(NewButton);
     }
 
+    // Variables for making shapes
     bool is_drawing = false;
+    sf::Vector2i last_mouse_pos = sf::Mouse::getPosition(window);
 
     // Only grab input while the main window is open 
     while (window.isOpen())
@@ -114,11 +117,8 @@ int main()
                 // Draw in canvas if the mouse is in range
                 if (g_ShapeManager.GetTool() == tool_circle)
                 {
-                    g_CanvasManager.DrawShape(&g_ShapeManager, &window, current_color); // Pass in shape being drawn, window to get mouse location, and colour of shape
+                    g_CanvasManager.DrawShape(&g_ShapeManager, &window, last_mouse_pos, current_color); // Pass in shape being drawn, window to get mouse location, and colour of shape
                 }
-
-                // Shape tools
-                else { is_drawing = true; }
 
                 // Button Menu
                 for (int i = 0; i < button_count; i++)
@@ -159,13 +159,13 @@ int main()
                         // Elipses
                         if (i == 5)
                         {
-                            g_ShapeManager.SwapTool(tool_circle);
+                            g_ShapeManager.SwapTool(tool_elipse);
                         }
 
                         // Lines
                         if (i == 6)
                         {
-                            g_ShapeManager.SwapTool(tool_rectangle);
+                            g_ShapeManager.SwapTool(tool_line);
                         }
                     }
                 }
@@ -175,16 +175,22 @@ int main()
             if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
             {
                 // Draw in canvas
-                g_CanvasManager.DrawShape(&g_ShapeManager, &window, sf::Color::White); // Pass in window to get mouse location
+                g_CanvasManager.DrawShape(&g_ShapeManager, &window, last_mouse_pos, sf::Color::White); // Pass in shape being drawn, window to get mouse location, and colour of shape
+            }
+
+            // Grab mouse position when first held
+            if (const auto* keyPressed = event->getIf<sf::Event::MouseButtonPressed>())
+            {
+                last_mouse_pos = sf::Mouse::getPosition(window);
             }
 
             // Left MB released
             if (const auto* keyPressed = event->getIf<sf::Event::MouseButtonReleased>())
             {
-                is_drawing = false;
-                if (g_ShapeManager.GetTool() == tool_rectangle)
+                // As long as its not the default draw circle
+                if (g_ShapeManager.GetTool() != tool_circle)
                 {
-                    g_CanvasManager.DrawShape(&g_ShapeManager, &window, current_color); // Pass in shape being drawn, window to get mouse location, and colour of shape
+                    g_CanvasManager.DrawShape(&g_ShapeManager, &window, last_mouse_pos, current_color); // Pass in shape being drawn, window to get mouse location, and colour of shape
                 }
             }
 
@@ -220,9 +226,9 @@ int main()
             }
 
             // Elipses
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num1))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num3))
             {
-                g_ShapeManager.SwapTool(tool_circle);
+                g_ShapeManager.SwapTool(tool_elipse);
             }
 
             // Lines

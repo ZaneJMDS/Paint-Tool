@@ -11,7 +11,7 @@ public:
 	Canvas();
 	~Canvas();
 	void Update(sf::RenderWindow* _window);
-	void DrawShape(ShapeManager* _manager, sf::RenderWindow* _window, sf::Color _color);
+	void DrawShape(ShapeManager* _manager, sf::RenderWindow* _window, sf::Vector2i _last_mouse_pos, sf::Color _color);
 	void ResetCanvas();
 	int GetThickness() { return thickness; }
 	void SetThickness(float _thickness) { thickness = _thickness; }
