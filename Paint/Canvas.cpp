@@ -114,7 +114,7 @@ void Canvas::DrawShape(ShapeManager* _manager, sf::RenderWindow* _window, sf::Ve
 
 			// Default line parameters
 			sf::RectangleShape Line;
-			Line.setSize(sf::Vector2f({ distance, thickness }));
+			Line.setSize(sf::Vector2f({ distance, thickness / 2.f }));
 			Line.setFillColor(_color);
 			Line.setPosition(sf::Vector2f(_last_mouse_pos));
 

@@ -20,10 +20,11 @@ int main()
 
     // Circle setup
     sf::CircleShape Circle(g_CanvasManager.GetThickness());
-    sf::CircleShape Circle2(50.f);
-    Circle.setFillColor(sf::Color(0, 0, 0, 0));
-    Circle.setOutlineThickness(1.f);
-    Circle.setOutlineColor(sf::Color::Black);
+    sf::CircleShape Circle2(g_CanvasManager.GetThickness());
+    sf::CircleShape Circle3(g_CanvasManager.GetThickness());
+    Circle3.setFillColor(sf::Color(0, 0, 0, 0));
+    Circle3.setOutlineThickness(1.f);
+    Circle3.setOutlineColor(sf::Color::Black);
 
     // Rectangle setup
     sf::RectangleShape Rectangle({ 50.f, 50.f });
@@ -82,11 +83,10 @@ int main()
     // Only grab input while the main window is open 
     while (window.isOpen())
     {
+        // Create thickness text 
         sf::Text ThicknessText(Font1, "Thickness: " + std::to_string(g_CanvasManager.GetThickness()), 24);
         sf::Vector2i mouse_pos = sf::Mouse::getPosition(window); // Draw to this location
-        mouse_pos.x -= 100;
-        mouse_pos.y -= 100;
-        Circle.setPosition(sf::Vector2f(mouse_pos));
+        Circle3.setPosition(sf::Vector2f(mouse_pos.x - Circle3.getRadius(), mouse_pos.y - Circle3.getRadius()));
 
         // If an event happened in Main window
         while (const std::optional event = window.pollEvent())
@@ -111,8 +111,8 @@ int main()
                     // Scroll down decreases size
                     if ((mouse->delta) < 0) 
                     { 
-                        g_CanvasManager.SetThickness(g_CanvasManager.GetThickness() - 5.f);
-                        Circle.setRadius(Circle.getRadius() - 5.f);
+                        g_CanvasManager.SetThickness(g_CanvasManager.GetThickness() - 2.f);
+                        Circle3.setRadius(Circle3.getRadius() - 2.f);
                     } 
                 }
 
@@ -122,8 +122,8 @@ int main()
                     // Scroll up increases size
                     if ((mouse->delta) > 0) 
                     { 
-                        g_CanvasManager.SetThickness(g_CanvasManager.GetThickness() + 5.f); 
-                        Circle.setRadius(Circle.getRadius() + 5.f);
+                        g_CanvasManager.SetThickness(g_CanvasManager.GetThickness() + 2.f); 
+                        Circle3.setRadius(Circle3.getRadius() + 2.f);
                     } 
                 }
             }
@@ -295,7 +295,7 @@ int main()
         // Draw thickness
         ThicknessText.setPosition({ 110.f * button_count, 810.f });
         window.draw(ThicknessText);
-        window.draw(Circle);
+        window.draw(Circle3); // Preview circle
 
         window.display();
 
