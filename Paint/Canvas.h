@@ -15,5 +15,6 @@ public:
 	void ResetCanvas();
 	int GetThickness() { return thickness; }
 	void SetThickness(float _thickness) { thickness = _thickness; }
+	sf::RenderTexture* GetCanvas() { return m_render_tex; }
 };
 

@@ -89,5 +89,12 @@ void Canvas::DrawShape(ShapeManager* _manager, sf::RenderWindow* _window, sf::Co
 
 void Canvas::ResetCanvas()
 {
+	// Do the same as in the constructor but with the same render texture
+	sf::RectangleShape NewShape({ 1024, 800 }); // Canvas size
+	NewShape.setFillColor(sf::Color::White); // Set starting background to white
+
+	m_render_tex->draw(NewShape);
 	m_canvas_shape.setFillColor(sf::Color::White);
+	m_canvas_shape.setSize({ 1024, 800 });
+	m_canvas_shape.setTexture(&m_render_tex->getTexture());
 }

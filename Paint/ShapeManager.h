@@ -21,6 +21,7 @@ public:
 	ShapeManager();
 	~ShapeManager();
 
+	CurrentTool GetTool() { return m_current_tool; }
 	void SwapTool(CurrentTool _target_tool) { m_current_tool = _target_tool; }
 	void SetTools(sf::CircleShape* _circle_ref, sf::RectangleShape* _rect_ref);
 	void Update(sf::RenderWindow* _window);
