@@ -23,8 +23,8 @@ int main()
     sf::CircleShape Circle2(g_CanvasManager.GetThickness());
     sf::CircleShape Circle3(g_CanvasManager.GetThickness());
     Circle3.setFillColor(sf::Color(0, 0, 0, 0));
-    Circle3.setOutlineThickness(1.f);
-    Circle3.setOutlineColor(sf::Color::Black);
+    Circle3.setOutlineThickness(2.f);
+    Circle3.setOutlineColor(sf::Color(128, 128, 128));
 
     // Rectangle setup
     sf::RectangleShape Rectangle({ 50.f, 50.f });
@@ -83,8 +83,9 @@ int main()
     // Only grab input while the main window is open 
     while (window.isOpen())
     {
-        // Create thickness text 
-        sf::Text ThicknessText(Font1, "Thickness: " + std::to_string(g_CanvasManager.GetThickness()), 24);
+        // Create thickness text
+        std::string OutlineThickText = "";
+        sf::Text ThicknessText(Font1, OutlineThickText + "Thickness: " + std::to_string(g_CanvasManager.GetThickness()), 24);
         sf::Vector2i mouse_pos = sf::Mouse::getPosition(window); // Draw to this location
         Circle3.setPosition(sf::Vector2f(mouse_pos.x - Circle3.getRadius(), mouse_pos.y - Circle3.getRadius()));
 
@@ -117,7 +118,7 @@ int main()
                 }
 
                 // Check the size isn't too large
-                if (g_CanvasManager.GetThickness() < 100.f)
+                if (g_CanvasManager.GetThickness() < 50.f)
                 {
                     // Scroll up increases size
                     if ((mouse->delta) > 0) 
@@ -143,6 +144,8 @@ int main()
                     // Did user click on a button
                     if (buttons[i].m_ButtonShape.getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition(window))))
                     {
+                        buttons[i].Update();
+
                         // Save file by clicking the button
                         if (i == 0)
                         {
@@ -234,24 +237,28 @@ int main()
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num1))
             {
                 g_ShapeManager.SwapTool(tool_circle);
+                OutlineThickText = "";
             }
 
             // Boxes
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num2))
             {
                 g_ShapeManager.SwapTool(tool_rectangle);
+                OutlineThickText = "Outline ";
             }
 
             // Elipses
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num3))
             {
                 g_ShapeManager.SwapTool(tool_elipse);
+                OutlineThickText = "Outline ";
             }
 
             // Lines
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num4))
             {
                 g_ShapeManager.SwapTool(tool_line);
+                OutlineThickText = "";
             }
         }
 
@@ -275,6 +282,7 @@ int main()
                     if (color_buttons[i].m_ButtonShape.getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition(tool_window))))
                     {
                         current_color = color_array[i];
+                        color_buttons[i].Update();
                     }
                 }
             }
@@ -295,7 +303,16 @@ int main()
         // Draw thickness
         ThicknessText.setPosition({ 110.f * button_count, 810.f });
         window.draw(ThicknessText);
-        window.draw(Circle3); // Preview circle
+        if (g_ShapeManager.GetTool() == tool_circle) 
+        { 
+            // Check Mouse is on the canvas
+            if (mouse_pos.x < 1024 && mouse_pos.x > 0 && mouse_pos.y < 800 && mouse_pos.y > 0) { window.draw(Circle3); } // Preview circle
+        } 
+
+        for (int i = 0; i < color_count; i++) 
+        {
+            // if (current_color == color_array[i]) { current_color; }
+        }
 
         window.display();
 
@@ -303,10 +320,7 @@ int main()
         tool_window.clear();
 
         // Draw color buttons
-        for (int i = 0; i < color_count; i++)
-        {
-            tool_window.draw(color_buttons[i].m_ButtonShape);
-        }
+        for (int i = 0; i < color_count; i++) { tool_window.draw(color_buttons[i].m_ButtonShape); }
 
         // Tool window updates
         tool_window.display();

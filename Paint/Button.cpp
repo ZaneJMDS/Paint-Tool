@@ -19,11 +19,12 @@ void Button::Update()
 {
 	switch (m_ButtonRole)
 	{
-	case Button_Rectangle:
-		break;
-	case Button_Circle:
-		break;
-	default:
-		break;
+		case Button_Rectangle:
+			break;
+		case Button_Circle:
+			break;
+		default:
+			m_ButtonShape.setOutlineThickness(-10.f);
+			break;
 	}
 }

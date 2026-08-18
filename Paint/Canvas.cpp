@@ -17,6 +17,7 @@ Canvas::Canvas()
 
 Canvas::~Canvas()
 {
+	delete m_render_tex;
 }
 
 void Canvas::Update(sf::RenderWindow* _window)
@@ -28,10 +29,12 @@ void Canvas::Update(sf::RenderWindow* _window)
 void Canvas::DrawShape(ShapeManager* _manager, sf::RenderWindow* _window, sf::Vector2i _last_mouse_pos, sf::Color _color)
 {
 	sf::Vector2i mouse_pos = sf::Mouse::getPosition(*_window); // Draw to this location
-
-	switch (_manager->m_current_tool)
+	// Check Mouse is on the canvas
+	if (mouse_pos.x < 1024 && mouse_pos.x > 0 && mouse_pos.y < 800 && mouse_pos.y > 0)
 	{
-		// Draw rectangle
+		switch (_manager->m_current_tool)
+		{
+			// Draw rectangle
 		case tool_rectangle:
 		{
 			// Default rectangle parameters
@@ -39,7 +42,7 @@ void Canvas::DrawShape(ShapeManager* _manager, sf::RenderWindow* _window, sf::Ve
 			Rectangle.setSize(sf::Vector2f(mouse_pos - _last_mouse_pos));
 			Rectangle.setFillColor(_color);
 			Rectangle.setPosition(sf::Vector2f(_last_mouse_pos));
-			
+
 			// Thickness
 			Rectangle.setOutlineThickness(-thickness);
 			if (_color == sf::Color::White) { Rectangle.setOutlineColor(sf::Color::Black); }
@@ -48,8 +51,8 @@ void Canvas::DrawShape(ShapeManager* _manager, sf::RenderWindow* _window, sf::Ve
 			m_render_tex->draw(Rectangle);
 			m_render_tex->display();
 		}
-		
-			break;
+
+		break;
 
 		// Draw circle
 		case tool_circle:
@@ -86,8 +89,8 @@ void Canvas::DrawShape(ShapeManager* _manager, sf::RenderWindow* _window, sf::Ve
 			//	_manager->m_line_tool_ref.append(NewPoint);
 			//}
 		}
-			
-			break;
+
+		break;
 
 		case tool_elipse:
 		{
@@ -98,23 +101,28 @@ void Canvas::DrawShape(ShapeManager* _manager, sf::RenderWindow* _window, sf::Ve
 			Elipse.setRadius(5); // Have to set radius
 			Elipse.setScale(sf::Vector2f(mouse_pos / 10 - _last_mouse_pos / 10));
 
+			// Thickness
+			Elipse.setOutlineThickness(-thickness / 50.f);
+			Elipse.setOutlineColor(sf::Color::White);
+			if (_color == sf::Color::White) { Elipse.setOutlineColor(sf::Color::Black); }
+
 			// Draw to screen
 			m_render_tex->draw(Elipse);
 			m_render_tex->display();
 		}
-			
-			break;
+
+		break;
 
 		case tool_line:
 		{
 			// Find the distance
 			float a = mouse_pos.x - _last_mouse_pos.x; // Horizontal
 			float b = mouse_pos.y - _last_mouse_pos.y; // Vertical
-			float distance = std::sqrt((a*a + b*b)); // Hypoteneus
+			float distance = std::sqrt((a * a + b * b)); // Hypoteneus
 
 			// Default line parameters
 			sf::RectangleShape Line;
-			Line.setSize(sf::Vector2f({ distance, thickness / 2.f }));
+			Line.setSize(sf::Vector2f({ distance, thickness / 4.f }));
 			Line.setFillColor(_color);
 			Line.setPosition(sf::Vector2f(_last_mouse_pos));
 
@@ -127,14 +135,16 @@ void Canvas::DrawShape(ShapeManager* _manager, sf::RenderWindow* _window, sf::Ve
 			m_render_tex->display();
 		}
 
-			break;
-		
+		break;
+
 		// If no tool has been selected, do nothing
 		default:
 			break;
+		}
 	}
 }
 
+// Set the canvas back to white
 void Canvas::ResetCanvas()
 {
 	// Do the same as in the constructor but with the same render texture
@@ -142,7 +152,4 @@ void Canvas::ResetCanvas()
 	NewShape.setFillColor(sf::Color::White); // Set starting background to white
 
 	m_render_tex->draw(NewShape);
-	m_canvas_shape.setFillColor(sf::Color::White);
-	m_canvas_shape.setSize({ 1024, 800 });
-	m_canvas_shape.setTexture(&m_render_tex->getTexture());
 }
