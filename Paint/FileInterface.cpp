@@ -24,12 +24,14 @@ void FileInterface::LoadFile(sf::RenderTexture* _texture)
 		// L chooses the file type
 		LPCWSTR szJPG = L"Jpeg";
 		LPCWSTR szBMP = L"Bitmap";
+		LPCWSTR szPNG = L"Png";
 		LPCWSTR szAll = L"ALL";
 
 		COMDLG_FILTERSPEC rgSpec[] =
 		{
 			{szJPG, L"*.jpg;*.jpeg"},
 			{szBMP, L"*.bmp"},
+			{szPNG, L"*.png"},
 			{szAll, L"*.*"}
 		};
 
@@ -64,19 +66,16 @@ void FileInterface::LoadFile(sf::RenderTexture* _texture)
 
 
 					}
-					// Water bucket RELEASE!!!
 					pItem->Release();
 				}
 			}
-
 			pFileOpen->Release();
 		}
 		CoUninitialize();
 	}
 }
 
-// Code from Zac
-// Save file to users file explorer
+// Save file to users file explorer (Code from Zac)
 void FileInterface::SaveFile(sf::RenderTexture* _texture)
 {
 	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
@@ -89,19 +88,41 @@ void FileInterface::SaveFile(sf::RenderTexture* _texture)
 		hr = CoCreateInstance(CLSID_FileSaveDialog, NULL, CLSCTX_ALL,
 			IID_IFileSaveDialog, reinterpret_cast<void**>(&pFileSave));
 
+		// L chooses the file type
+		LPCWSTR szJPG = L"Jpeg";
+		LPCWSTR szBMP = L"Bitmap";
+		LPCWSTR szPNG = L"Png";
+		LPCWSTR szAll = L"ALL";
+
+		COMDLG_FILTERSPEC rgSpec[] =
+		{
+			{szJPG, L"*.jpg;*.jpeg"},
+			{szBMP, L"*.bmp"},
+			{szPNG, L"*.png"},
+			{szAll, L"*.*"}
+		};
+
+		pFileSave->SetFileTypes(3, rgSpec);
+		pFileSave->SetFileName(rgSpec[0].pszSpec);
+		pFileSave->SetFileNameLabel(szBMP);
+
 		if (SUCCEEDED(hr))
 		{
 			// Show the Save dialog box.
 			hr = pFileSave->Show(NULL);
 
-			// Get the file name from the dialog box.
 			if (SUCCEEDED(hr))
 			{
+				// Get the file name from the dialog box.
 				IShellItem* pItem;
 				hr = pFileSave->GetResult(&pItem);
+
 				if (SUCCEEDED(hr))
 				{
 					PWSTR pszFilePath;
+					wchar_t test[100] = L".jpg";
+					pszFilePath = test;
+
 					hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
 
 					// Display the file name to the user.

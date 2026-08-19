@@ -7,7 +7,7 @@
 int main()
 {
     // Window Setup
-    sf::RenderWindow window(sf::VideoMode({ 1024, 900 }), "Paint (Alpha)"); // Window Config
+    sf::RenderWindow window(sf::VideoMode({ 1024, 900 }), "Paint (Beta)"); // Window Config
     sf::RenderWindow tool_window(sf::VideoMode({ 400, 200 }), "Colour Picker"); // Colour Window Config
     window.setFramerateLimit(60);
     tool_window.setFramerateLimit(60);
@@ -60,6 +60,9 @@ int main()
         buttons.push_back(NewButton);
     }
 
+    // Default button select
+    buttons[3].Update();
+
     // Color setup
     const int color_count = 8;
     sf::Color color_array[color_count] = {sf::Color::Black, sf::Color::Red, sf::Color(255, 165, 0), sf::Color::Yellow, sf::Color::Green, sf::Color::Cyan, sf::Color::Blue, sf::Color::Magenta};
@@ -76,15 +79,17 @@ int main()
         color_buttons.push_back(NewButton);
     }
 
+    color_buttons[0].Update();
+
     // Variables for making shapes
     bool is_drawing = false;
+    std::string OutlineThickText = "";
     sf::Vector2i last_mouse_pos = sf::Mouse::getPosition(window);
 
     // Only grab input while the main window is open 
     while (window.isOpen())
     {
         // Create thickness text
-        std::string OutlineThickText = "";
         sf::Text ThicknessText(Font1, OutlineThickText + "Thickness: " + std::to_string(g_CanvasManager.GetThickness()), 24);
         sf::Vector2i mouse_pos = sf::Mouse::getPosition(window); // Draw to this location
         Circle3.setPosition(sf::Vector2f(mouse_pos.x - Circle3.getRadius(), mouse_pos.y - Circle3.getRadius()));
@@ -138,13 +143,18 @@ int main()
                     g_CanvasManager.DrawShape(&g_ShapeManager, &window, last_mouse_pos, current_color); // Pass in shape being drawn, window to get mouse location, and colour of shape
                 }
 
-                // Button Menu
                 for (int i = 0; i < button_count; i++)
                 {
                     // Did user click on a button
                     if (buttons[i].m_ButtonShape.getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition(window))))
                     {
-                        buttons[i].Update();
+                        for (int i = 0; i < button_count; i++)
+                        {
+                            buttons[i].ResetButton();
+                        }
+
+                        // Check that it is tool selected and not a menu button
+                        if (i > 2) { buttons[i].Update(); }
 
                         // Save file by clicking the button
                         if (i == 0)
@@ -168,24 +178,28 @@ int main()
                         if (i == 3)
                         {
                             g_ShapeManager.SwapTool(tool_circle);
+                            OutlineThickText = "";
                         }
 
                         // Boxes
                         if (i == 4)
                         {
                             g_ShapeManager.SwapTool(tool_rectangle);
+                            OutlineThickText = "Outline ";
                         }
 
                         // Elipses
                         if (i == 5)
                         {
                             g_ShapeManager.SwapTool(tool_elipse);
+                            OutlineThickText = "Outline ";
                         }
 
                         // Lines
                         if (i == 6)
                         {
                             g_ShapeManager.SwapTool(tool_line);
+                            OutlineThickText = "";
                         }
                     }
                 }
@@ -238,6 +252,12 @@ int main()
             {
                 g_ShapeManager.SwapTool(tool_circle);
                 OutlineThickText = "";
+                
+                for (int i = 0; i < button_count; i++)
+                {
+                    buttons[i].ResetButton();
+                }
+                buttons[3].Update();
             }
 
             // Boxes
@@ -245,6 +265,12 @@ int main()
             {
                 g_ShapeManager.SwapTool(tool_rectangle);
                 OutlineThickText = "Outline ";
+
+                for (int i = 0; i < button_count; i++)
+                {
+                    buttons[i].ResetButton();
+                }
+                buttons[4].Update();
             }
 
             // Elipses
@@ -252,6 +278,12 @@ int main()
             {
                 g_ShapeManager.SwapTool(tool_elipse);
                 OutlineThickText = "Outline ";
+
+                for (int i = 0; i < button_count; i++)
+                {
+                    buttons[i].ResetButton();
+                }
+                buttons[5].Update();
             }
 
             // Lines
@@ -259,6 +291,12 @@ int main()
             {
                 g_ShapeManager.SwapTool(tool_line);
                 OutlineThickText = "";
+
+                for (int i = 0; i < button_count; i++)
+                {
+                    buttons[i].ResetButton();
+                }
+                buttons[6].Update();
             }
         }
 
@@ -281,6 +319,11 @@ int main()
                 {
                     if (color_buttons[i].m_ButtonShape.getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition(tool_window))))
                     {
+                        // Did user click on a button
+                        for (int i = 0; i < color_count; i++)
+                        {
+                            color_buttons[i].ResetButton();
+                        }
                         current_color = color_array[i];
                         color_buttons[i].Update();
                     }
@@ -301,8 +344,10 @@ int main()
         }
 
         // Draw thickness
-        ThicknessText.setPosition({ 110.f * button_count, 810.f });
+        ThicknessText.setPosition({ 100.f * button_count + 10.f, 810.f });
         window.draw(ThicknessText);
+
+        // Only show preview circle if that is the current tool
         if (g_ShapeManager.GetTool() == tool_circle) 
         { 
             // Check Mouse is on the canvas

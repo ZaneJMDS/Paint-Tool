@@ -17,5 +17,6 @@ public:
 	~Button();
 
 	void Update();
+	void ResetButton();
 };
 

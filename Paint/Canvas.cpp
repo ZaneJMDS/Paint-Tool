@@ -122,8 +122,9 @@ void Canvas::DrawShape(ShapeManager* _manager, sf::RenderWindow* _window, sf::Ve
 
 			// Default line parameters
 			sf::RectangleShape Line;
-			Line.setSize(sf::Vector2f({ distance, thickness / 4.f }));
-			Line.setFillColor(_color);
+			Line.setSize(sf::Vector2f({ distance, 0 }));
+			Line.setOutlineThickness(thickness / 2.f);
+			Line.setOutlineColor(_color); // OutlineColor centers the line to the mouse
 			Line.setPosition(sf::Vector2f(_last_mouse_pos));
 
 			// Calculate the angle
