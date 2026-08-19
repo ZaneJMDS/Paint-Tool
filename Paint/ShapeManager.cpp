@@ -6,15 +6,15 @@ ShapeManager::ShapeManager()
 	sf::Vertex a;
 	a.color = sf::Color::Green; 
 	a.position = sf::Vector2f(0, 0);
-	m_line_tool_ref.append(a);
-	m_line_tool_ref.setPrimitiveType(sf::PrimitiveType::TriangleFan);
+	// m_line_tool_ref.append(a);
+	// m_line_tool_ref.setPrimitiveType(sf::PrimitiveType::TriangleFan);
 }
 
 ShapeManager::~ShapeManager()
 {
 }
 
-// Set shapes for circle and rectangle tools
+// Set references for tools
 void ShapeManager::SetTools(sf::CircleShape* _circle_ref, sf::RectangleShape* _rect_ref, sf::CircleShape* _elipse_ref)
 {
 	m_circle_ref = _circle_ref;
@@ -22,6 +22,7 @@ void ShapeManager::SetTools(sf::CircleShape* _circle_ref, sf::RectangleShape* _r
 	m_elipse_ref = _elipse_ref;
 }
 
+// Set position of shapes to mouse position
 void ShapeManager::Update(sf::RenderWindow* _window)
 {
 	sf::Vector2f mouse_pos = (sf::Vector2f)sf::Mouse::getPosition(*_window);

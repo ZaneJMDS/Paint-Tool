@@ -75,7 +75,7 @@ void FileInterface::LoadFile(sf::RenderTexture* _texture)
 	}
 }
 
-// Save file to users file explorer (Code from Zac)
+// Save file to users file explorer
 void FileInterface::SaveFile(sf::RenderTexture* _texture)
 {
 	HRESULT hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
@@ -102,6 +102,7 @@ void FileInterface::SaveFile(sf::RenderTexture* _texture)
 			{szAll, L"*.*"}
 		};
 
+		// Preload the .jpg in the file explorer
 		pFileSave->SetFileTypes(3, rgSpec);
 		pFileSave->SetFileName(rgSpec[0].pszSpec);
 		pFileSave->SetFileNameLabel(szBMP);

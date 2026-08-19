@@ -14,13 +14,13 @@ Button::~Button()
 {
 }
 
-// when click button update
+// when selected button update the look
 void Button::Update()
 {
 	m_ButtonShape.setOutlineThickness(-8.f);
 }
 
-// When button isn't current
+// When button isn't selected, reset
 void Button::ResetButton()
 {
 	m_ButtonShape.setOutlineThickness(-2.f);
