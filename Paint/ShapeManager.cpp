@@ -41,12 +41,6 @@ void ShapeManager::Update(sf::RenderWindow* _window)
 		m_elipse_ref->setPosition(mouse_pos);
 		break;
 
-	case tool_line:
-		break;
-
-	case tool_colour:
-		break;
-
 	default:
 		break;
 	}

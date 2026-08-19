@@ -6,8 +6,7 @@ enum CurrentTool
 	tool_rectangle,
 	tool_circle,
 	tool_elipse,
-	tool_line,
-	tool_colour
+	tool_line
 };
 
 class ShapeManager

@@ -15,7 +15,7 @@ IMPORTANT
 Features / Instructions:
 
 * Draw with left MB
-* White colour (Erase) with right MB (Only for draw tool) 
+* White colour (Erase) with right MB (Only for draw tool)
 * Make shapes like boxes, ellipses, and lines with the shape tool by dragging and releasing with left MB
 * Adjusting thickness (Outline thickness for boxes and ellipses) with the scroll wheel. Scroll up increases thickness, scroll down decreases thickness.
 * Save (Ctrl + S) and load files (Ctrl + L) with JPEGs, PNGs, and bitmaps
@@ -35,6 +35,7 @@ Known problems / Potential future updates:
 * Polygon tool
 * Stamp tool
 * More colours / colour picker
+* Undo / Redo
 
 
 
